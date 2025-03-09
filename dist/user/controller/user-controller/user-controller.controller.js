@@ -36,6 +36,9 @@ let UserControllerController = class UserControllerController {
             return response;
         }
     }
+    async resendOtp(email) {
+        return await this._userService.resendOtp(email);
+    }
     async verifyOtp(verifyOtpDto) {
         return await this._userService.verifyOtp(verifyOtpDto);
     }
@@ -90,6 +93,13 @@ __decorate([
     __metadata("design:paramtypes", [registration_dto_1.registrationDto]),
     __metadata("design:returntype", Promise)
 ], UserControllerController.prototype, "userRegistration", null);
+__decorate([
+    (0, common_1.Post)('resendOtp'),
+    __param(0, (0, common_1.Body)('email')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], UserControllerController.prototype, "resendOtp", null);
 __decorate([
     (0, common_1.Post)('verifyOtp'),
     __param(0, (0, common_1.Body)()),

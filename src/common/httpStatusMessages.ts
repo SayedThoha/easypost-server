@@ -7,5 +7,4 @@ export const HttpStatusMessages = {
   NOT_FOUND: 'Not Found',
   INTERNAL_SERVER_ERROR: 'Internal Server Error',
   CONFLICT: 'Unexpected Conflict',
-  // Add more status codes as needed
 };

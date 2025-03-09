@@ -62,6 +62,21 @@ let UserService = class UserService {
             }
         }
     }
+    async resendOtp(email) {
+        const user = await this.userModel.findOne({ email });
+        if (!user) {
+            throw new common_1.HttpException('User not found', common_1.HttpStatus.NOT_FOUND);
+        }
+        const otpResponse = await (0, otp_service_1.sendOtp)(email);
+        if (!otpResponse.success) {
+            throw new common_1.HttpException('Failed to resend OTP', common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        await this.userModel.updateOne({ email }, { $set: { otp: Number(otpResponse.otp), otpSendTime: Date.now() } });
+        return {
+            status: httpStatusCodes_1.HttpStatusCodes.OK,
+            message: 'OTP has been resent successfully',
+        };
+    }
     async verifyOtp(verifyOtpDto) {
         let newEmail;
         if (verifyOtpDto.newEmail !== null) {

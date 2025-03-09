@@ -59,6 +59,33 @@ export class UserService {
     }
   }
 
+  async resendOtp(email: string): Promise<responseDto> {
+    const user = await this.userModel.findOne({ email });
+
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+
+    const otpResponse = await sendOtp(email);
+
+    if (!otpResponse.success) {
+      throw new HttpException(
+        'Failed to resend OTP',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+
+    await this.userModel.updateOne(
+      { email },
+      { $set: { otp: Number(otpResponse.otp), otpSendTime: Date.now() } },
+    );
+
+    return {
+      status: HttpStatusCodes.OK,
+      message: 'OTP has been resent successfully',
+    };
+  }
+
   async verifyOtp(verifyOtpDto: verifyOtpDto): Promise<responseDto> {
     let newEmail: string | undefined;
     if (verifyOtpDto.newEmail !== null) {
@@ -73,14 +100,13 @@ export class UserService {
       if (userData) {
         const otpExpiryMinute = 59;
         const otpExpirySecond = otpExpiryMinute * 60;
-        // checking the timer
+
         const timeDifference = Math.floor(
           (new Date().getTime() - new Date(userData.otpSendTime).getTime()) /
             1000,
         );
         if (timeDifference > otpExpirySecond) {
           throw new HttpException('Otp Expired. ', HttpStatus.BAD_REQUEST);
-          //instead of throwing error return the error
         }
         if (otp != userData.otp) {
           throw new HttpException('Invalid Otp', HttpStatus.BAD_REQUEST);
@@ -151,7 +177,6 @@ export class UserService {
         secret: process.env.JWT_REFRESH_SECRET || '9645743868_refresh',
       });
 
-      // Generate new access token
       const newAccessToken = this.jwtService.sign(
         { _id: payload._id, email: payload.email },
         {

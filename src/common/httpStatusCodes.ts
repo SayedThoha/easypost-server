@@ -7,5 +7,4 @@ export const HttpStatusCodes = {
   NOT_FOUND: 404,
   INTERNAL_SERVER_ERROR: 500,
   CONFLICT: 409,
-  // Add more status codes as needed
 };

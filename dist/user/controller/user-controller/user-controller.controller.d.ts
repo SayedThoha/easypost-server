@@ -10,6 +10,7 @@ export declare class UserControllerController {
     private readonly _userService;
     constructor(_userService: UserService);
     userRegistration(registrationDto: registrationDto): Promise<responseDto>;
+    resendOtp(email: string): Promise<responseDto>;
     verifyOtp(verifyOtpDto: verifyOtpDto): Promise<responseDto>;
     login(loginDto: loginDto): Promise<responseDto>;
     refreshToken(refreshToken: string): Promise<responseDto>;

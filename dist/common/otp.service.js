@@ -4,10 +4,8 @@ exports.sendOtp = sendOtp;
 const nodemailer = require("nodemailer");
 const crypto_1 = require("crypto");
 async function sendOtp(email) {
-    console.log('send otp service');
     try {
         const otp = (0, crypto_1.randomInt)(100000, 999999).toString();
-        console.log(otp);
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
@@ -16,12 +14,11 @@ async function sendOtp(email) {
             },
         });
         const mailOptions = {
-            from: '"Easy Post" devsaytho@gmail.com',
+            from: `"Easy Post" ${process.env.TRANSPORTER_EMAIL}`,
             to: email,
             subject: 'Your OTP Code',
             text: `Your OTP code is ${otp}. It is valid for 10 minutes.`,
         };
-        console.log(mailOptions);
         await transporter.sendMail(mailOptions);
         return {
             success: true,

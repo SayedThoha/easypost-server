@@ -15,6 +15,7 @@ export declare class UserService {
     private blogModel;
     constructor(userModel: Model<User>, jwtService: JwtService, blogModel: Model<Blog>);
     userRegistration(registrationDto: registrationDto): Promise<responseDto>;
+    resendOtp(email: string): Promise<responseDto>;
     verifyOtp(verifyOtpDto: verifyOtpDto): Promise<responseDto>;
     login(loginDto: loginDto): Promise<responseDto>;
     refreshToken(refreshToken: string): Promise<responseDto>;

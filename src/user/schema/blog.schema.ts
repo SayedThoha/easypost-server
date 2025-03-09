@@ -3,7 +3,7 @@ import { Document, Types } from 'mongoose';
 import { User } from './user.schema';
 
 @Schema({
-  timestamps: true, //createdAt and updatedAt fields
+  timestamps: true,
 })
 export class Blog extends Document {
   @Prop({ required: true })

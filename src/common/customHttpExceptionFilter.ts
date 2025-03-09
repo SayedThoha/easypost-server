@@ -12,10 +12,9 @@ export class CustomHttpExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse();
     const status = exception.getStatus();
 
-    // Customize your error response here
     const errorResponse = {
       statusCode: status,
-      message: exception.getResponse(), // You can modify this if needed
+      message: exception.getResponse(),
     };
 
     response.status(status).json(errorResponse);

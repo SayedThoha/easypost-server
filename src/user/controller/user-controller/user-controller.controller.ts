@@ -43,6 +43,12 @@ export class UserControllerController {
       return response;
     }
   }
+
+  @Post('resendOtp')
+  async resendOtp(@Body('email') email: string) {
+    return await this._userService.resendOtp(email);
+  }
+
   @Post('verifyOtp')
   async verifyOtp(@Body() verifyOtpDto: verifyOtpDto): Promise<responseDto> {
     return await this._userService.verifyOtp(verifyOtpDto);
