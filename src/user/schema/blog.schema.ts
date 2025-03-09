@@ -18,10 +18,9 @@ export class Blog extends Document {
   @Prop({ required: true })
   image: string;
 
-  @Prop({ type: Types.ObjectId, ref: User.name, required: true }) // Reference to User
-  userId: Types.ObjectId; // Use ObjectId type for referencing
+  @Prop({ type: Types.ObjectId, ref: User.name, required: true })
+  userId: Types.ObjectId;
 
-  // Declare createdAt and updatedAt explicitly
   createdAt?: Date;
   updatedAt?: Date;
 }

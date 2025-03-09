@@ -16,8 +16,8 @@ import { UserControllerController } from './controller/user-controller/user-cont
     ]),
     PassportModule,
     JwtModule.register({
-      secret: process.env.JWT_SECRET || '9645743868', // Use a secure key and store it in environment variables
-      signOptions: { expiresIn: '1h' }, // Token expiration time
+      secret: process.env.JWT_SECRET || '9645743868',
+      signOptions: { expiresIn: '1h' },
     }),
   ],
   providers: [UserService, JwtStrategy],

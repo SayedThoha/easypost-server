@@ -7,7 +7,9 @@ import {
   HttpException,
   HttpStatus,
   Param,
+  Patch,
   Post,
+  Put,
   UseFilters,
 } from '@nestjs/common';
 import { CustomHttpExceptionFilter } from 'src/common/customHttpExceptionFilter';
@@ -30,9 +32,8 @@ export class UserControllerController {
   async userRegistration(
     @Body() registrationDto: registrationDto,
   ): Promise<responseDto> {
-    console.log('user registration controller');
     const response = await this._userService.userRegistration(registrationDto);
-    // If the response indicates an error, throw an HttpException
+
     if (response.status === HttpStatusCodes.BAD_REQUEST) {
       throw new HttpException(
         response.error ?? 'An error occurred',
@@ -44,12 +45,10 @@ export class UserControllerController {
   }
   @Post('verifyOtp')
   async verifyOtp(@Body() verifyOtpDto: verifyOtpDto): Promise<responseDto> {
-    console.log('verify otp controller', verifyOtpDto);
     return await this._userService.verifyOtp(verifyOtpDto);
   }
   @Post('login')
   async login(@Body() loginDto: loginDto): Promise<responseDto> {
-    console.log('login controller');
     return await this._userService.login(loginDto);
   }
   @Post('refresh-token')
@@ -59,65 +58,53 @@ export class UserControllerController {
   }
   @Post('createBlog')
   async createBlog(@Body() blogDto: blogDto): Promise<responseDto> {
-    console.log('createBlog controller', blogDto);
     return await this._userService.createBlog(blogDto);
   }
-  @Post('editBlog')
+  @Put('editBlog')
   async editBlog(@Body() blogDto: blogDto): Promise<responseDto> {
-    console.log('editBlog controller', blogDto);
     return await this._userService.editBlog(blogDto);
   }
   @Delete('deleteBlog/:blogId')
   async deleteBlog(@Param('blogId') blogId: string): Promise<responseDto> {
-    console.log('deleteBlog controller', blogId);
     return await this._userService.deleteBlog(blogId);
   }
   @Get('PersonalBlogs/:userId')
   async PersonalBlogs(
     @Param('userId') userId: string,
   ): Promise<displayBlogDto[]> {
-    console.log('PersonalBlogs controller');
     return await this._userService.PersonalBlogs(userId);
   }
   @Get('AllBlogs')
   async AllBlogs(): Promise<displayBlogDto[]> {
-    console.log('AllBlogs controller');
     return await this._userService.AllBlogs();
   }
   @Get('SingleBlog/:blogId')
   async SingleBlog(@Param('blogId') blogId: string): Promise<displayBlogDto> {
-    console.log('SingleBlog controller');
     return await this._userService.SingleBlog(blogId);
   }
   @Get('userDetails/:_id')
   async userDetails(@Param('_id') _id: string): Promise<userDto> {
-    console.log('userDetails controller');
     return await this._userService.userDetails(_id);
   }
   @Post('changeProfilePicture')
   async changeProfilePicture(@Body() userDto: userDto): Promise<responseDto> {
-    console.log('changeProfilePicture controller');
     return await this._userService.changeProfilePicture(userDto);
   }
-  @Post('editUserName')
+  @Patch('editUserName')
   async editUserName(@Body() userDto: userDto): Promise<responseDto> {
-    console.log('editUserName controller');
     return await this._userService.editUserName(userDto);
   }
   @Post('editUserEmail')
   async editUserEmail(@Body() userDto: userDto): Promise<responseDto> {
-    console.log('editUserEmail controller');
-    console.log('user ', userDto);
     return await this._userService.editUserEmail(userDto);
   }
   @Post('verifyEmail')
   async verifyEmail(@Body() userDto: userDto): Promise<responseDto> {
-    console.log('verifyEmail controller');
     return await this._userService.verifyEmail(userDto);
   }
-  @Post('newPassword')
+
+  @Patch('newPassword')
   async newPassword(@Body() userDto: userDto): Promise<responseDto> {
-    console.log('newPassword controller');
     return await this._userService.newPassword(userDto);
   }
 }

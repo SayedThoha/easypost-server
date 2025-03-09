@@ -24,7 +24,7 @@ export class displayBlogDto {
   image: string;
 
   @IsNotEmpty()
-  createdAt: Date; // Optional fields for createdAt and updatedAt
+  createdAt: Date;
 
   @IsNotEmpty()
   updatedAt: Date;

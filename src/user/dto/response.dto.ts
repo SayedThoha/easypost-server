@@ -23,7 +23,7 @@ export class responseDto {
 
   @IsString()
   @IsOptional()
-  accessedUser?: unknown; //datatype of the _id
+  accessedUser?: unknown;
 
   @IsString()
   @IsOptional()

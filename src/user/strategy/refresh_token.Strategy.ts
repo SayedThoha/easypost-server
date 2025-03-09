@@ -9,14 +9,13 @@ export class RefreshTokenStrategy extends PassportStrategy(
 ) {
   constructor() {
     super({
-      jwtFromRequest: ExtractJwt.fromBodyField('refreshToken'), // Get the refresh token from the request body
+      jwtFromRequest: ExtractJwt.fromBodyField('refreshToken'),
       ignoreExpiration: false,
-      secretOrKey: process.env.JWT_REFRESH_SECRET || '9645743868_refresh', // Same key used for refresh tokens
+      secretOrKey: process.env.JWT_REFRESH_SECRET || '9645743868_refresh',
     });
   }
 
   avalidate(payload: any) {
-    // You can add additional validation if needed, e.g., check the refresh token against the database
     return { userId: payload._id, email: payload.email };
   }
 }
