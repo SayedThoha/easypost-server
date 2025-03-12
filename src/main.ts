@@ -7,7 +7,7 @@ async function bootstrap() {
   app.useGlobalFilters(new CustomHttpExceptionFilter());
 
   app.enableCors({
-    origin: 'http://localhost:4200',
+    origin: 'https://easypost-client.vercel.app',
     methods: 'GET,POST,PUT,PATCH,DELETE',
     credentials: true,
   });
