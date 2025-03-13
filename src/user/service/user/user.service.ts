@@ -14,6 +14,7 @@ import { blogDto } from 'src/user/dto/blog.dto';
 import { displayBlogDto } from 'src/user/dto/displayBlog.dto';
 import { userDto } from 'src/user/dto/user.dto';
 import { loginDto } from 'src/user/dto/login.dto';
+import { BlogDocument } from 'src/user/interfaces/blogInterface';
 
 @Injectable()
 export class UserService {
@@ -274,16 +275,16 @@ export class UserService {
     const blogs = await this.blogModel
       .find({ userId: userId })
       .populate('userId')
-      .lean();
+      .lean<BlogDocument[]>();
 
-    return blogs.map((blog: any) => ({
+    return blogs.map((blog) => ({
       userId: {
         _id: blog.userId._id,
         firstname: blog.userId.firstname,
         lastname: blog.userId.lastname,
         email: blog.userId.email,
       },
-      _id: blog._id as Types.ObjectId,
+      _id: blog._id,
       topic: blog.topic,
       title: blog.title,
       content: blog.content,
@@ -294,15 +295,18 @@ export class UserService {
   }
 
   async AllBlogs(): Promise<displayBlogDto[]> {
-    const blogs = await this.blogModel.find().populate('userId').lean();
-    return blogs.map((blog: any) => ({
+    const blogs = await this.blogModel
+      .find()
+      .populate('userId')
+      .lean<BlogDocument[]>();
+    return blogs.map((blog) => ({
       userId: {
         _id: blog.userId._id,
         firstname: blog.userId.firstname,
         lastname: blog.userId.lastname,
         email: blog.userId.email,
       },
-      _id: blog._id as Types.ObjectId,
+      _id: blog._id,
       topic: blog.topic,
       title: blog.title,
       content: blog.content,
