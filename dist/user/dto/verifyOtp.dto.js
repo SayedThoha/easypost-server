@@ -15,6 +15,7 @@ class verifyOtpDto {
     otp;
     email;
     newEmail;
+    isForgotPassword;
 }
 exports.verifyOtpDto = verifyOtpDto;
 __decorate([
@@ -32,4 +33,9 @@ __decorate([
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
 ], verifyOtpDto.prototype, "newEmail", void 0);
+__decorate([
+    (0, class_validator_1.IsBoolean)(),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", Boolean)
+], verifyOtpDto.prototype, "isForgotPassword", void 0);
 //# sourceMappingURL=verifyOtp.dto.js.map
