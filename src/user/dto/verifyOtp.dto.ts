@@ -1,4 +1,10 @@
-import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import {
+  IsBoolean,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class verifyOtpDto {
   @IsNumber()
@@ -12,4 +18,8 @@ export class verifyOtpDto {
   @IsString()
   @IsOptional()
   newEmail?: string;
+
+  @IsBoolean()
+  @IsOptional()
+  isForgotPassword?: boolean;
 }

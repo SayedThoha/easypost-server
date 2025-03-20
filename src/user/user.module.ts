@@ -7,6 +7,8 @@ import { JwtStrategy } from './strategy/jwt.Strategy';
 import { Blog, BlogSchema } from './schema/blog.schema';
 import { UserService } from './service/user/user.service';
 import { UserControllerController } from './controller/user-controller/user-controller.controller';
+import { UserRepository } from './repository/user.repository';
+import { BlogRepository } from './repository/blog.repository';
 
 @Module({
   imports: [
@@ -20,8 +22,8 @@ import { UserControllerController } from './controller/user-controller/user-cont
       signOptions: { expiresIn: '1h' },
     }),
   ],
-  providers: [UserService, JwtStrategy],
+  providers: [UserService, JwtStrategy, UserRepository, BlogRepository],
   controllers: [UserControllerController],
-  exports: [UserService],
+  exports: [UserService, UserRepository, BlogRepository],
 })
 export class UserModule {}
