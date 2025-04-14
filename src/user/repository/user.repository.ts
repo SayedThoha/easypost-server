@@ -48,11 +48,11 @@ export class UserRepository implements IUserRepository {
 
   async updateUserName(
     userId: string,
-    firstname: string,
-    lastname: string,
+    firstName: string,
+    lastName: string,
   ): Promise<void> {
     await this.userModel.findByIdAndUpdate(userId, {
-      $set: { firstname, lastname },
+      $set: { firstName, lastName },
     });
   }
 

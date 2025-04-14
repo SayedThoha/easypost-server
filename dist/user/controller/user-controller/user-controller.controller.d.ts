@@ -7,8 +7,8 @@ import { userDto } from 'src/user/dto/user.dto';
 import { verifyOtpDto } from 'src/user/dto/verifyOtp.dto';
 import { UserService } from 'src/user/service/user/user.service';
 export declare class UserControllerController {
-    private readonly _userService;
-    constructor(_userService: UserService);
+    private readonly userService;
+    constructor(userService: UserService);
     userRegistration(registrationDto: registrationDto): Promise<responseDto>;
     resendOtp(email: string): Promise<responseDto>;
     verifyOtp(verifyOtpDto: verifyOtpDto): Promise<responseDto>;
@@ -17,9 +17,9 @@ export declare class UserControllerController {
     createBlog(blogDto: blogDto): Promise<responseDto>;
     editBlog(blogDto: blogDto): Promise<responseDto>;
     deleteBlog(blogId: string): Promise<responseDto>;
-    PersonalBlogs(userId: string): Promise<displayBlogDto[]>;
-    AllBlogs(): Promise<displayBlogDto[]>;
-    SingleBlog(blogId: string): Promise<displayBlogDto>;
+    personalBlogs(userId: string): Promise<displayBlogDto[]>;
+    allBlogs(): Promise<displayBlogDto[]>;
+    singleBlog(blogId: string): Promise<displayBlogDto>;
     userDetails(_id: string): Promise<userDto>;
     changeProfilePicture(userDto: userDto): Promise<responseDto>;
     editUserName(userDto: userDto): Promise<responseDto>;

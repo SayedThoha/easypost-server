@@ -10,8 +10,8 @@ export interface IUserRepository {
   updateProfilePicture(userId: string, profilePicture: string): Promise<void>;
   updateUserName(
     userId: string,
-    firstname: string,
-    lastname: string,
+    firstName: string,
+    lastName: string,
   ): Promise<void>;
   updateOtpByUserId(userId: string, otp: number): Promise<void>;
   updatePassword(email: string, hashedPassword: string): Promise<void>;

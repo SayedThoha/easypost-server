@@ -47,8 +47,8 @@ export class BlogRepository implements IBlogRepository {
       .populate<{
         userId: {
           _id: Types.ObjectId;
-          firstname: string;
-          lastname: string;
+          firstName: string;
+          lastName: string;
           email: string;
         };
       }>('userId')

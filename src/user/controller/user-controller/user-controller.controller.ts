@@ -26,13 +26,13 @@ import { UserService } from 'src/user/service/user/user.service';
 @Controller('user')
 @UseFilters(new CustomHttpExceptionFilter())
 export class UserControllerController {
-  constructor(private readonly _userService: UserService) {}
+  constructor(private readonly userService: UserService) {}
 
   @Post('userRegister')
   async userRegistration(
     @Body() registrationDto: registrationDto,
   ): Promise<responseDto> {
-    const response = await this._userService.userRegistration(registrationDto);
+    const response = await this.userService.userRegistration(registrationDto);
 
     if (response.status === HttpStatusCodes.BAD_REQUEST) {
       throw new HttpException(
@@ -46,71 +46,71 @@ export class UserControllerController {
 
   @Post('resendOtp')
   async resendOtp(@Body('email') email: string) {
-    return await this._userService.resendOtp(email);
+    return await this.userService.resendOtp(email);
   }
 
   @Post('verifyOtp')
   async verifyOtp(@Body() verifyOtpDto: verifyOtpDto): Promise<responseDto> {
-    return await this._userService.verifyOtp(verifyOtpDto);
+    return await this.userService.verifyOtp(verifyOtpDto);
   }
   @Post('login')
   async login(@Body() loginDto: loginDto): Promise<responseDto> {
-    return await this._userService.login(loginDto);
+    return await this.userService.login(loginDto);
   }
-  @Post('refresh-token')
+  @Post('refreshToken')
   @HttpCode(HttpStatus.OK)
   async refreshToken(@Body('refreshToken') refreshToken: string) {
-    return await this._userService.refreshToken(refreshToken);
+    return await this.userService.refreshToken(refreshToken);
   }
   @Post('createBlog')
   async createBlog(@Body() blogDto: blogDto): Promise<responseDto> {
-    return await this._userService.createBlog(blogDto);
+    return await this.userService.createBlog(blogDto);
   }
   @Put('editBlog')
   async editBlog(@Body() blogDto: blogDto): Promise<responseDto> {
-    return await this._userService.editBlog(blogDto);
+    return await this.userService.editBlog(blogDto);
   }
   @Delete('deleteBlog/:blogId')
   async deleteBlog(@Param('blogId') blogId: string): Promise<responseDto> {
-    return await this._userService.deleteBlog(blogId);
+    return await this.userService.deleteBlog(blogId);
   }
-  @Get('PersonalBlogs/:userId')
-  async PersonalBlogs(
+  @Get('personalBlogs/:userId')
+  async personalBlogs(
     @Param('userId') userId: string,
   ): Promise<displayBlogDto[]> {
-    return await this._userService.PersonalBlogs(userId);
+    return await this.userService.personalBlogs(userId);
   }
-  @Get('AllBlogs')
-  async AllBlogs(): Promise<displayBlogDto[]> {
-    return await this._userService.AllBlogs();
+  @Get('allBlogs')
+  async allBlogs(): Promise<displayBlogDto[]> {
+    return await this.userService.allBlogs();
   }
-  @Get('SingleBlog/:blogId')
-  async SingleBlog(@Param('blogId') blogId: string): Promise<displayBlogDto> {
-    return await this._userService.SingleBlog(blogId);
+  @Get('singleBlog/:blogId')
+  async singleBlog(@Param('blogId') blogId: string): Promise<displayBlogDto> {
+    return await this.userService.singleBlog(blogId);
   }
   @Get('userDetails/:_id')
   async userDetails(@Param('_id') _id: string): Promise<userDto> {
-    return await this._userService.userDetails(_id);
+    return await this.userService.userDetails(_id);
   }
   @Post('changeProfilePicture')
   async changeProfilePicture(@Body() userDto: userDto): Promise<responseDto> {
-    return await this._userService.changeProfilePicture(userDto);
+    return await this.userService.changeProfilePicture(userDto);
   }
   @Patch('editUserName')
   async editUserName(@Body() userDto: userDto): Promise<responseDto> {
-    return await this._userService.editUserName(userDto);
+    return await this.userService.editUserName(userDto);
   }
   @Post('editUserEmail')
   async editUserEmail(@Body() userDto: userDto): Promise<responseDto> {
-    return await this._userService.editUserEmail(userDto);
+    return await this.userService.editUserEmail(userDto);
   }
   @Post('verifyEmail')
   async verifyEmail(@Body() userDto: userDto): Promise<responseDto> {
-    return await this._userService.verifyEmail(userDto);
+    return await this.userService.verifyEmail(userDto);
   }
 
   @Patch('newPassword')
   async newPassword(@Body() userDto: userDto): Promise<responseDto> {
-    return await this._userService.newPassword(userDto);
+    return await this.userService.newPassword(userDto);
   }
 }

@@ -6,11 +6,11 @@ export class userDto {
 
   @IsString()
   @IsOptional()
-  firstname?: string;
+  firstName?: string;
 
   @IsString()
   @IsOptional()
-  lastname?: string;
+  lastName?: string;
 
   @IsString()
   @IsOptional()

@@ -23,12 +23,12 @@ const user_dto_1 = require("../../dto/user.dto");
 const verifyOtp_dto_1 = require("../../dto/verifyOtp.dto");
 const user_service_1 = require("../../service/user/user.service");
 let UserControllerController = class UserControllerController {
-    _userService;
-    constructor(_userService) {
-        this._userService = _userService;
+    userService;
+    constructor(userService) {
+        this.userService = userService;
     }
     async userRegistration(registrationDto) {
-        const response = await this._userService.userRegistration(registrationDto);
+        const response = await this.userService.userRegistration(registrationDto);
         if (response.status === httpStatusCodes_1.HttpStatusCodes.BAD_REQUEST) {
             throw new common_1.HttpException(response.error ?? 'An error occurred', common_1.HttpStatus.BAD_REQUEST);
         }
@@ -37,52 +37,52 @@ let UserControllerController = class UserControllerController {
         }
     }
     async resendOtp(email) {
-        return await this._userService.resendOtp(email);
+        return await this.userService.resendOtp(email);
     }
     async verifyOtp(verifyOtpDto) {
-        return await this._userService.verifyOtp(verifyOtpDto);
+        return await this.userService.verifyOtp(verifyOtpDto);
     }
     async login(loginDto) {
-        return await this._userService.login(loginDto);
+        return await this.userService.login(loginDto);
     }
     async refreshToken(refreshToken) {
-        return await this._userService.refreshToken(refreshToken);
+        return await this.userService.refreshToken(refreshToken);
     }
     async createBlog(blogDto) {
-        return await this._userService.createBlog(blogDto);
+        return await this.userService.createBlog(blogDto);
     }
     async editBlog(blogDto) {
-        return await this._userService.editBlog(blogDto);
+        return await this.userService.editBlog(blogDto);
     }
     async deleteBlog(blogId) {
-        return await this._userService.deleteBlog(blogId);
+        return await this.userService.deleteBlog(blogId);
     }
-    async PersonalBlogs(userId) {
-        return await this._userService.PersonalBlogs(userId);
+    async personalBlogs(userId) {
+        return await this.userService.PersonalBlogs(userId);
     }
-    async AllBlogs() {
-        return await this._userService.AllBlogs();
+    async allBlogs() {
+        return await this.userService.AllBlogs();
     }
-    async SingleBlog(blogId) {
-        return await this._userService.SingleBlog(blogId);
+    async singleBlog(blogId) {
+        return await this.userService.SingleBlog(blogId);
     }
     async userDetails(_id) {
-        return await this._userService.userDetails(_id);
+        return await this.userService.userDetails(_id);
     }
     async changeProfilePicture(userDto) {
-        return await this._userService.changeProfilePicture(userDto);
+        return await this.userService.changeProfilePicture(userDto);
     }
     async editUserName(userDto) {
-        return await this._userService.editUserName(userDto);
+        return await this.userService.editUserName(userDto);
     }
     async editUserEmail(userDto) {
-        return await this._userService.editUserEmail(userDto);
+        return await this.userService.editUserEmail(userDto);
     }
     async verifyEmail(userDto) {
-        return await this._userService.verifyEmail(userDto);
+        return await this.userService.verifyEmail(userDto);
     }
     async newPassword(userDto) {
-        return await this._userService.newPassword(userDto);
+        return await this.userService.newPassword(userDto);
     }
 };
 exports.UserControllerController = UserControllerController;
@@ -115,7 +115,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UserControllerController.prototype, "login", null);
 __decorate([
-    (0, common_1.Post)('refresh-token'),
+    (0, common_1.Post)('refreshToken'),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
     __param(0, (0, common_1.Body)('refreshToken')),
     __metadata("design:type", Function),
@@ -144,25 +144,25 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UserControllerController.prototype, "deleteBlog", null);
 __decorate([
-    (0, common_1.Get)('PersonalBlogs/:userId'),
+    (0, common_1.Get)('personalBlogs/:userId'),
     __param(0, (0, common_1.Param)('userId')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
-], UserControllerController.prototype, "PersonalBlogs", null);
+], UserControllerController.prototype, "personalBlogs", null);
 __decorate([
-    (0, common_1.Get)('AllBlogs'),
+    (0, common_1.Get)('allBlogs'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
-], UserControllerController.prototype, "AllBlogs", null);
+], UserControllerController.prototype, "allBlogs", null);
 __decorate([
-    (0, common_1.Get)('SingleBlog/:blogId'),
+    (0, common_1.Get)('singleBlog/:blogId'),
     __param(0, (0, common_1.Param)('blogId')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
-], UserControllerController.prototype, "SingleBlog", null);
+], UserControllerController.prototype, "singleBlog", null);
 __decorate([
     (0, common_1.Get)('userDetails/:_id'),
     __param(0, (0, common_1.Param)('_id')),

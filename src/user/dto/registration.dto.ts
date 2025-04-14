@@ -3,11 +3,11 @@ import { IsNotEmpty, IsString, MinLength } from 'class-validator';
 export class registrationDto {
   @IsString()
   @IsNotEmpty()
-  firstname: string;
+  firstName: string;
 
   @IsString()
   @IsNotEmpty()
-  lastname: string;
+  lastName: string;
 
   @IsString()
   @IsNotEmpty()
