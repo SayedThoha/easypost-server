@@ -48,9 +48,9 @@ let UserRepository = class UserRepository {
             $set: { profilePicture },
         });
     }
-    async updateUserName(userId, firstname, lastname) {
+    async updateUserName(userId, firstName, lastName) {
         await this.userModel.findByIdAndUpdate(userId, {
-            $set: { firstname, lastname },
+            $set: { firstName, lastName },
         });
     }
     async updateOtpByUserId(userId, otp) {

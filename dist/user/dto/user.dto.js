@@ -13,8 +13,8 @@ exports.userDto = void 0;
 const class_validator_1 = require("class-validator");
 class userDto {
     _id;
-    firstname;
-    lastname;
+    firstName;
+    lastName;
     email;
     profilePicture;
     password;
@@ -24,12 +24,12 @@ __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
-], userDto.prototype, "firstname", void 0);
+], userDto.prototype, "firstName", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
-], userDto.prototype, "lastname", void 0);
+], userDto.prototype, "lastName", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),

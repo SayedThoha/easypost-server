@@ -13,8 +13,8 @@ exports.UserSchema = exports.User = void 0;
 const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
 let User = class User extends mongoose_2.Document {
-    firstname;
-    lastname;
+    firstName;
+    lastName;
     email;
     password;
     otp;
@@ -26,11 +26,11 @@ exports.User = User;
 __decorate([
     (0, mongoose_1.Prop)({ required: true }),
     __metadata("design:type", String)
-], User.prototype, "firstname", void 0);
+], User.prototype, "firstName", void 0);
 __decorate([
     (0, mongoose_1.Prop)({ required: true }),
     __metadata("design:type", String)
-], User.prototype, "lastname", void 0);
+], User.prototype, "lastName", void 0);
 __decorate([
     (0, mongoose_1.Prop)({ required: true }),
     __metadata("design:type", String)

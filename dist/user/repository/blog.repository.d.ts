@@ -14,8 +14,8 @@ export declare class BlogRepository implements IBlogRepository {
     singleBlog(blogId: string): Promise<(import("mongoose").FlattenMaps<Omit<Blog, "userId"> & {
         userId: {
             _id: Types.ObjectId;
-            firstname: string;
-            lastname: string;
+            firstName: string;
+            lastName: string;
             email: string;
         };
     }> & Required<{

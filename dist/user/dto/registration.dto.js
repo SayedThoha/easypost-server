@@ -12,8 +12,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.registrationDto = void 0;
 const class_validator_1 = require("class-validator");
 class registrationDto {
-    firstname;
-    lastname;
+    firstName;
+    lastName;
     email;
     password;
 }
@@ -22,12 +22,12 @@ __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
-], registrationDto.prototype, "firstname", void 0);
+], registrationDto.prototype, "firstName", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
-], registrationDto.prototype, "lastname", void 0);
+], registrationDto.prototype, "lastName", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),

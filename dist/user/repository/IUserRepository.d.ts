@@ -7,7 +7,7 @@ export interface IUserRepository {
     updateUserEmail(userId: string, newEmail: string): Promise<void>;
     findById(userId: string): Promise<User | null>;
     updateProfilePicture(userId: string, profilePicture: string): Promise<void>;
-    updateUserName(userId: string, firstname: string, lastname: string): Promise<void>;
+    updateUserName(userId: string, firstName: string, lastName: string): Promise<void>;
     updateOtpByUserId(userId: string, otp: number): Promise<void>;
     updatePassword(email: string, hashedPassword: string): Promise<void>;
 }

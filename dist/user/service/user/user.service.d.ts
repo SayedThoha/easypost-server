@@ -27,7 +27,7 @@ export declare class UserService {
     createBlog(createBlogDto: blogDto): Promise<responseDto>;
     editBlog(editBlogDto: blogDto): Promise<responseDto>;
     deleteBlog(_id: string): Promise<responseDto>;
-    PersonalBlogs(userId: string): Promise<displayBlogDto[]>;
-    AllBlogs(): Promise<displayBlogDto[]>;
-    SingleBlog(blogId: string): Promise<displayBlogDto>;
+    personalBlogs(userId: string): Promise<displayBlogDto[]>;
+    allBlogs(): Promise<displayBlogDto[]>;
+    singleBlog(blogId: string): Promise<displayBlogDto>;
 }

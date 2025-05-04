@@ -164,8 +164,8 @@ let UserService = class UserService {
             throw new Error('User not found');
         }
         return {
-            firstname: userDetails.firstname,
-            lastname: userDetails.lastname,
+            firstName: userDetails.firstName,
+            lastName: userDetails.lastName,
             email: userDetails.email,
             profilePicture: userDetails.profilePicture,
         };
@@ -186,8 +186,8 @@ let UserService = class UserService {
         }
     }
     async editUserName(userDto) {
-        if ((userDto._id && userDto.firstname, userDto.lastname)) {
-            await this.userRepository.updateUserName(userDto._id, userDto.firstname, userDto.lastname);
+        if ((userDto._id && userDto.firstName, userDto.lastName)) {
+            await this.userRepository.updateUserName(userDto._id, userDto.firstName, userDto.lastName);
             return {
                 status: httpStatusCodes_1.HttpStatusCodes.OK,
                 message: 'User profile updated',
@@ -348,13 +348,13 @@ let UserService = class UserService {
             message: 'Deleted Successfully',
         };
     }
-    async PersonalBlogs(userId) {
+    async personalBlogs(userId) {
         const blogs = await this.blogRepository.personalBlogs(userId);
         return blogs.map((blog) => ({
             userId: {
                 _id: blog.userId._id,
-                firstname: blog.userId.firstname,
-                lastname: blog.userId.lastname,
+                firstName: blog.userId.firstName,
+                lastName: blog.userId.lastName,
                 email: blog.userId.email,
             },
             _id: blog._id,
@@ -366,13 +366,13 @@ let UserService = class UserService {
             updatedAt: blog.updatedAt,
         }));
     }
-    async AllBlogs() {
+    async allBlogs() {
         const blogs = await this.blogRepository.allBlogs();
         return blogs.map((blog) => ({
             userId: {
                 _id: blog.userId._id,
-                firstname: blog.userId.firstname,
-                lastname: blog.userId.lastname,
+                firstName: blog.userId.firstName,
+                lastName: blog.userId.lastName,
                 email: blog.userId.email,
             },
             _id: blog._id,
@@ -384,7 +384,7 @@ let UserService = class UserService {
             updatedAt: blog.updatedAt,
         }));
     }
-    async SingleBlog(blogId) {
+    async singleBlog(blogId) {
         const blogs = await this.blogRepository.singleBlog(blogId);
         if (!blogs) {
             throw new common_1.HttpException('Blog not found', common_1.HttpStatus.NOT_FOUND);
@@ -395,8 +395,8 @@ let UserService = class UserService {
         return {
             userId: {
                 _id: blogs.userId._id,
-                firstname: blogs.userId.firstname,
-                lastname: blogs.userId.lastname,
+                firstName: blogs.userId.firstName,
+                lastName: blogs.userId.lastName,
                 email: blogs.userId.email,
             },
             _id: blogs._id,
@@ -411,7 +411,7 @@ let UserService = class UserService {
 };
 exports.UserService = UserService;
 __decorate([
-    (0, common_1.Post)('refresh-token'),
+    (0, common_1.Post)('refreshToken'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)

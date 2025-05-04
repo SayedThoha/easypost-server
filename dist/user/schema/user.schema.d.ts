@@ -1,7 +1,7 @@
 import { Document } from 'mongoose';
 export declare class User extends Document {
-    firstname: string;
-    lastname: string;
+    firstName: string;
+    lastName: string;
     email: string;
     password: string;
     otp: number;

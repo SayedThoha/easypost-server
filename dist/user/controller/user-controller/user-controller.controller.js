@@ -58,13 +58,13 @@ let UserControllerController = class UserControllerController {
         return await this.userService.deleteBlog(blogId);
     }
     async personalBlogs(userId) {
-        return await this.userService.PersonalBlogs(userId);
+        return await this.userService.personalBlogs(userId);
     }
     async allBlogs() {
-        return await this.userService.AllBlogs();
+        return await this.userService.allBlogs();
     }
     async singleBlog(blogId) {
-        return await this.userService.SingleBlog(blogId);
+        return await this.userService.singleBlog(blogId);
     }
     async userDetails(_id) {
         return await this.userService.userDetails(_id);
