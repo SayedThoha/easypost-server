@@ -21,11 +21,14 @@ const login_dto_1 = require("../../dto/login.dto");
 const registration_dto_1 = require("../../dto/registration.dto");
 const user_dto_1 = require("../../dto/user.dto");
 const verifyOtp_dto_1 = require("../../dto/verifyOtp.dto");
+const blog_service_1 = require("../../service/blog/blog.service");
 const user_service_1 = require("../../service/user/user.service");
 let UserControllerController = class UserControllerController {
     userService;
-    constructor(userService) {
+    blogService;
+    constructor(userService, blogService) {
         this.userService = userService;
+        this.blogService = blogService;
     }
     async userRegistration(registrationDto) {
         const response = await this.userService.userRegistration(registrationDto);
@@ -48,24 +51,6 @@ let UserControllerController = class UserControllerController {
     async refreshToken(refreshToken) {
         return await this.userService.refreshToken(refreshToken);
     }
-    async createBlog(blogDto) {
-        return await this.userService.createBlog(blogDto);
-    }
-    async editBlog(blogDto) {
-        return await this.userService.editBlog(blogDto);
-    }
-    async deleteBlog(blogId) {
-        return await this.userService.deleteBlog(blogId);
-    }
-    async personalBlogs(userId) {
-        return await this.userService.personalBlogs(userId);
-    }
-    async allBlogs() {
-        return await this.userService.allBlogs();
-    }
-    async singleBlog(blogId) {
-        return await this.userService.singleBlog(blogId);
-    }
     async userDetails(_id) {
         return await this.userService.userDetails(_id);
     }
@@ -83,6 +68,24 @@ let UserControllerController = class UserControllerController {
     }
     async newPassword(userDto) {
         return await this.userService.newPassword(userDto);
+    }
+    async createBlog(blogDto) {
+        return await this.blogService.createBlog(blogDto);
+    }
+    async editBlog(blogDto) {
+        return await this.blogService.editBlog(blogDto);
+    }
+    async deleteBlog(blogId) {
+        return await this.blogService.deleteBlog(blogId);
+    }
+    async personalBlogs(userId) {
+        return await this.blogService.personalBlogs(userId);
+    }
+    async allBlogs() {
+        return await this.blogService.allBlogs();
+    }
+    async singleBlog(blogId) {
+        return await this.blogService.singleBlog(blogId);
     }
 };
 exports.UserControllerController = UserControllerController;
@@ -122,47 +125,6 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], UserControllerController.prototype, "refreshToken", null);
-__decorate([
-    (0, common_1.Post)('createBlog'),
-    __param(0, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [blog_dto_1.blogDto]),
-    __metadata("design:returntype", Promise)
-], UserControllerController.prototype, "createBlog", null);
-__decorate([
-    (0, common_1.Put)('editBlog'),
-    __param(0, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [blog_dto_1.blogDto]),
-    __metadata("design:returntype", Promise)
-], UserControllerController.prototype, "editBlog", null);
-__decorate([
-    (0, common_1.Delete)('deleteBlog/:blogId'),
-    __param(0, (0, common_1.Param)('blogId')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", Promise)
-], UserControllerController.prototype, "deleteBlog", null);
-__decorate([
-    (0, common_1.Get)('personalBlogs/:userId'),
-    __param(0, (0, common_1.Param)('userId')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", Promise)
-], UserControllerController.prototype, "personalBlogs", null);
-__decorate([
-    (0, common_1.Get)('allBlogs'),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Promise)
-], UserControllerController.prototype, "allBlogs", null);
-__decorate([
-    (0, common_1.Get)('singleBlog/:blogId'),
-    __param(0, (0, common_1.Param)('blogId')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", Promise)
-], UserControllerController.prototype, "singleBlog", null);
 __decorate([
     (0, common_1.Get)('userDetails/:_id'),
     __param(0, (0, common_1.Param)('_id')),
@@ -205,9 +167,51 @@ __decorate([
     __metadata("design:paramtypes", [user_dto_1.userDto]),
     __metadata("design:returntype", Promise)
 ], UserControllerController.prototype, "newPassword", null);
+__decorate([
+    (0, common_1.Post)('createBlog'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [blog_dto_1.blogDto]),
+    __metadata("design:returntype", Promise)
+], UserControllerController.prototype, "createBlog", null);
+__decorate([
+    (0, common_1.Put)('editBlog'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [blog_dto_1.blogDto]),
+    __metadata("design:returntype", Promise)
+], UserControllerController.prototype, "editBlog", null);
+__decorate([
+    (0, common_1.Delete)('deleteBlog/:blogId'),
+    __param(0, (0, common_1.Param)('blogId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], UserControllerController.prototype, "deleteBlog", null);
+__decorate([
+    (0, common_1.Get)('personalBlogs/:userId'),
+    __param(0, (0, common_1.Param)('userId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], UserControllerController.prototype, "personalBlogs", null);
+__decorate([
+    (0, common_1.Get)('allBlogs'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], UserControllerController.prototype, "allBlogs", null);
+__decorate([
+    (0, common_1.Get)('singleBlog/:blogId'),
+    __param(0, (0, common_1.Param)('blogId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], UserControllerController.prototype, "singleBlog", null);
 exports.UserControllerController = UserControllerController = __decorate([
     (0, common_1.Controller)('user'),
     (0, common_1.UseFilters)(new customHttpExceptionFilter_1.CustomHttpExceptionFilter()),
-    __metadata("design:paramtypes", [user_service_1.UserService])
+    __metadata("design:paramtypes", [user_service_1.UserService,
+        blog_service_1.BlogService])
 ], UserControllerController);
 //# sourceMappingURL=user-controller.controller.js.map

@@ -41,7 +41,7 @@ __decorate([
 ], Blog.prototype, "image", void 0);
 __decorate([
     (0, mongoose_1.Prop)({ type: mongoose_2.Types.ObjectId, ref: user_schema_1.User.name, required: true }),
-    __metadata("design:type", mongoose_2.Types.ObjectId)
+    __metadata("design:type", String)
 ], Blog.prototype, "userId", void 0);
 exports.Blog = Blog = __decorate([
     (0, mongoose_1.Schema)({

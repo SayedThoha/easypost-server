@@ -2,8 +2,6 @@ import { JwtService } from '@nestjs/jwt';
 import { registrationDto } from 'src/user/dto/registration.dto';
 import { responseDto } from 'src/user/dto/response.dto';
 import { verifyOtpDto } from 'src/user/dto/verifyOtp.dto';
-import { blogDto } from 'src/user/dto/blog.dto';
-import { displayBlogDto } from 'src/user/dto/displayBlog.dto';
 import { userDto } from 'src/user/dto/user.dto';
 import { loginDto } from 'src/user/dto/login.dto';
 import { UserRepository } from 'src/user/repository/user.repository';
@@ -24,10 +22,4 @@ export declare class UserService {
     editUserEmail(userDto: userDto): Promise<responseDto>;
     verifyEmail(userDto: userDto): Promise<responseDto>;
     newPassword(userDto: userDto): Promise<responseDto>;
-    createBlog(createBlogDto: blogDto): Promise<responseDto>;
-    editBlog(editBlogDto: blogDto): Promise<responseDto>;
-    deleteBlog(_id: string): Promise<responseDto>;
-    personalBlogs(userId: string): Promise<displayBlogDto[]>;
-    allBlogs(): Promise<displayBlogDto[]>;
-    singleBlog(blogId: string): Promise<displayBlogDto>;
 }

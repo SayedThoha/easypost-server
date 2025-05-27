@@ -28,13 +28,13 @@ let UserService = class UserService {
     }
     async userRegistration(registrationDto) {
         const { password, ...userData } = registrationDto;
-        const existingUser = await this.userRepository.findByEmail(userData.email);
+        const existingUser = await this.userRepository.findOne(userData.email);
         if (existingUser) {
             throw new common_1.HttpException('Email Already Exists', common_1.HttpStatus.BAD_REQUEST);
         }
         else {
             const hashedPassword = await bcrypt.hash(password, 10);
-            await this.userRepository.createUser({
+            await this.userRepository.create({
                 ...userData,
                 password: hashedPassword,
             });
@@ -55,7 +55,7 @@ let UserService = class UserService {
         }
     }
     async resendOtp(email) {
-        const user = await this.userRepository.findByEmail(email);
+        const user = await this.userRepository.findOne(email);
         if (!user) {
             throw new common_1.HttpException('User not found', common_1.HttpStatus.NOT_FOUND);
         }
@@ -76,12 +76,12 @@ let UserService = class UserService {
         }
         const { otp, email, isForgotPassword } = verifyOtpDto;
         if (!isForgotPassword && newEmail) {
-            const users = await this.userRepository.findUsersByEmail(newEmail);
+            const users = await this.userRepository.findAll(newEmail);
             if (users.length !== 0) {
                 throw new common_1.HttpException('Email already exists', common_1.HttpStatus.BAD_REQUEST);
             }
         }
-        const userData = await this.userRepository.findByEmail(email);
+        const userData = await this.userRepository.findOne(email);
         if (!userData) {
             throw new common_1.HttpException('Could not find the user', common_1.HttpStatus.BAD_REQUEST);
         }
@@ -104,7 +104,7 @@ let UserService = class UserService {
     }
     async login(loginDto) {
         const { email, password } = loginDto;
-        const userData = await this.userRepository.findByEmail(email);
+        const userData = await this.userRepository.findOne(email);
         if (!userData) {
             throw new common_1.HttpException('Invalid user', common_1.HttpStatus.BAD_REQUEST);
         }
@@ -226,7 +226,7 @@ let UserService = class UserService {
     }
     async verifyEmail(userDto) {
         if (userDto.email) {
-            const userData = await this.userRepository.findByEmail(userDto.email);
+            const userData = await this.userRepository.findOne(userDto.email);
             if (userData) {
                 const otpResponse = await (0, otp_service_1.sendOtp)(userData.email);
                 await this.userRepository.updateOtpByUserId(userData._id, Number(otpResponse.otp));
@@ -252,7 +252,7 @@ let UserService = class UserService {
     }
     async newPassword(userDto) {
         if (userDto.email && userDto.password) {
-            const userData = await this.userRepository.findByEmail(userDto.email);
+            const userData = await this.userRepository.findOne(userDto.email);
             if (userData) {
                 const hashedPassword = await bcrypt.hash(userDto.password, 10);
                 await this.userRepository.updatePassword(userDto.email, hashedPassword);
@@ -275,138 +275,6 @@ let UserService = class UserService {
                 message: 'Missing required fields',
             };
         }
-    }
-    async createBlog(createBlogDto) {
-        if (createBlogDto) {
-            const userData = await this.userRepository.findById(createBlogDto.userId);
-            if (userData) {
-                if (createBlogDto.topic === 'Other' && createBlogDto.otherTopic) {
-                    createBlogDto.topic = createBlogDto.otherTopic;
-                }
-                await this.blogRepository.create({
-                    topic: createBlogDto.topic,
-                    title: createBlogDto.title,
-                    content: createBlogDto.content,
-                    image: createBlogDto.image,
-                    userId: createBlogDto.userId,
-                });
-                return {
-                    status: httpStatusCodes_1.HttpStatusCodes.CREATED,
-                    message: 'Blog Created Successfully',
-                };
-            }
-            else {
-                return {
-                    status: httpStatusCodes_1.HttpStatusCodes.NOT_FOUND,
-                    message: 'User not found',
-                };
-            }
-        }
-        else {
-            return {
-                status: httpStatusCodes_1.HttpStatusCodes.BAD_REQUEST,
-                message: 'Missing Required fields',
-            };
-        }
-    }
-    async editBlog(editBlogDto) {
-        if (editBlogDto) {
-            const userData = await this.userRepository.findById(editBlogDto.userId);
-            if (userData) {
-                if (editBlogDto.topic === 'other' && editBlogDto.otherTopic) {
-                    editBlogDto.topic = editBlogDto.otherTopic;
-                }
-                await this.blogRepository.update(editBlogDto._id, {
-                    topic: editBlogDto.topic,
-                    title: editBlogDto.title,
-                    content: editBlogDto.content,
-                    image: editBlogDto.image,
-                });
-                return {
-                    status: httpStatusCodes_1.HttpStatusCodes.CREATED,
-                    message: 'Blog Edited Successfully',
-                };
-            }
-            else {
-                return {
-                    status: httpStatusCodes_1.HttpStatusCodes.NOT_FOUND,
-                    message: 'User not found',
-                };
-            }
-        }
-        else {
-            return {
-                status: httpStatusCodes_1.HttpStatusCodes.BAD_REQUEST,
-                message: 'Missing Required fields',
-            };
-        }
-    }
-    async deleteBlog(_id) {
-        await this.blogRepository.delete(_id);
-        return {
-            status: httpStatusCodes_1.HttpStatusCodes.OK,
-            message: 'Deleted Successfully',
-        };
-    }
-    async personalBlogs(userId) {
-        const blogs = await this.blogRepository.personalBlogs(userId);
-        return blogs.map((blog) => ({
-            userId: {
-                _id: blog.userId._id,
-                firstName: blog.userId.firstName,
-                lastName: blog.userId.lastName,
-                email: blog.userId.email,
-            },
-            _id: blog._id,
-            topic: blog.topic,
-            title: blog.title,
-            content: blog.content,
-            image: blog.image,
-            createdAt: blog.createdAt,
-            updatedAt: blog.updatedAt,
-        }));
-    }
-    async allBlogs() {
-        const blogs = await this.blogRepository.allBlogs();
-        return blogs.map((blog) => ({
-            userId: {
-                _id: blog.userId._id,
-                firstName: blog.userId.firstName,
-                lastName: blog.userId.lastName,
-                email: blog.userId.email,
-            },
-            _id: blog._id,
-            topic: blog.topic,
-            title: blog.title,
-            content: blog.content,
-            image: blog.image,
-            createdAt: blog.createdAt,
-            updatedAt: blog.updatedAt,
-        }));
-    }
-    async singleBlog(blogId) {
-        const blogs = await this.blogRepository.singleBlog(blogId);
-        if (!blogs) {
-            throw new common_1.HttpException('Blog not found', common_1.HttpStatus.NOT_FOUND);
-        }
-        if (!blogs.userId) {
-            throw new common_1.HttpException('User not found', common_1.HttpStatus.NOT_FOUND);
-        }
-        return {
-            userId: {
-                _id: blogs.userId._id,
-                firstName: blogs.userId.firstName,
-                lastName: blogs.userId.lastName,
-                email: blogs.userId.email,
-            },
-            _id: blogs._id,
-            topic: blogs.topic,
-            title: blogs.title,
-            content: blogs.content,
-            image: blogs.image,
-            createdAt: blogs.createdAt ?? new Date(),
-            updatedAt: blogs.updatedAt ?? new Date(),
-        };
     }
 };
 exports.UserService = UserService;

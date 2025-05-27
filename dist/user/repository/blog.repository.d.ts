@@ -1,26 +1,12 @@
-import { Model, Types } from 'mongoose';
+import { Model } from 'mongoose';
 import { Blog } from '../schema/blog.schema';
-import { blogDto } from '../dto/blog.dto';
 import { BlogDocument } from '../interfaces/blogInterface';
 import { IBlogRepository } from './IBlogRepository';
-export declare class BlogRepository implements IBlogRepository {
+import { BaseRepository } from './base.repository';
+export declare class BlogRepository extends BaseRepository<Blog> implements IBlogRepository {
     private blogModel;
     constructor(blogModel: Model<Blog>);
-    create(blogData: Partial<blogDto>): Promise<Blog>;
-    update(blogId: string, updateData: Partial<blogDto>): Promise<Blog | null>;
-    delete(blogId: string): Promise<Blog | null>;
     personalBlogs(userId: string): Promise<BlogDocument[]>;
     allBlogs(): Promise<BlogDocument[]>;
-    singleBlog(blogId: string): Promise<(import("mongoose").FlattenMaps<Omit<Blog, "userId"> & {
-        userId: {
-            _id: Types.ObjectId;
-            firstName: string;
-            lastName: string;
-            email: string;
-        };
-    }> & Required<{
-        _id: import("mongoose").FlattenMaps<unknown>;
-    }> & {
-        __v: number;
-    }) | null>;
+    singleBlog(blogId: string): Promise<BlogDocument | null>;
 }

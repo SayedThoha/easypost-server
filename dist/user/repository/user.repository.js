@@ -17,31 +17,20 @@ const mongoose_1 = require("@nestjs/mongoose");
 const user_schema_1 = require("../schema/user.schema");
 const common_1 = require("@nestjs/common");
 const mongoose_2 = require("mongoose");
-let UserRepository = class UserRepository {
+const base_repository_1 = require("./base.repository");
+let UserRepository = class UserRepository extends base_repository_1.BaseRepository {
     userModel;
     constructor(userModel) {
+        super(userModel);
         this.userModel = userModel;
-    }
-    async findByEmail(email) {
-        return this.userModel.findOne({ email });
-    }
-    async createUser(userData) {
-        const user = new this.userModel(userData);
-        return user.save();
     }
     async updateUser(email, otp) {
         await this.userModel.updateOne({ email }, { $set: { otp: otp, otpSendTime: Date.now() } });
-    }
-    async findUsersByEmail(email) {
-        return this.userModel.find({ email });
     }
     async updateUserEmail(userId, newEmail) {
         await this.userModel.findByIdAndUpdate(userId, {
             $set: { email: newEmail },
         });
-    }
-    async findById(userId) {
-        return this.userModel.findById(userId);
     }
     async updateProfilePicture(userId, profilePicture) {
         await this.userModel.findByIdAndUpdate(userId, {

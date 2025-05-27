@@ -19,7 +19,7 @@ export class Blog extends Document {
   image: string;
 
   @Prop({ type: Types.ObjectId, ref: User.name, required: true })
-  userId: Types.ObjectId;
+  userId: string;
 
   createdAt?: Date;
   updatedAt?: Date;

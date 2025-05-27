@@ -21,12 +21,16 @@ import { registrationDto } from 'src/user/dto/registration.dto';
 import { responseDto } from 'src/user/dto/response.dto';
 import { userDto } from 'src/user/dto/user.dto';
 import { verifyOtpDto } from 'src/user/dto/verifyOtp.dto';
+import { BlogService } from 'src/user/service/blog/blog.service';
 import { UserService } from 'src/user/service/user/user.service';
 
 @Controller('user')
 @UseFilters(new CustomHttpExceptionFilter())
 export class UserControllerController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly blogService: BlogService,
+  ) {}
 
   @Post('userRegister')
   async userRegistration(
@@ -62,32 +66,7 @@ export class UserControllerController {
   async refreshToken(@Body('refreshToken') refreshToken: string) {
     return await this.userService.refreshToken(refreshToken);
   }
-  @Post('createBlog')
-  async createBlog(@Body() blogDto: blogDto): Promise<responseDto> {
-    return await this.userService.createBlog(blogDto);
-  }
-  @Put('editBlog')
-  async editBlog(@Body() blogDto: blogDto): Promise<responseDto> {
-    return await this.userService.editBlog(blogDto);
-  }
-  @Delete('deleteBlog/:blogId')
-  async deleteBlog(@Param('blogId') blogId: string): Promise<responseDto> {
-    return await this.userService.deleteBlog(blogId);
-  }
-  @Get('personalBlogs/:userId')
-  async personalBlogs(
-    @Param('userId') userId: string,
-  ): Promise<displayBlogDto[]> {
-    return await this.userService.personalBlogs(userId);
-  }
-  @Get('allBlogs')
-  async allBlogs(): Promise<displayBlogDto[]> {
-    return await this.userService.allBlogs();
-  }
-  @Get('singleBlog/:blogId')
-  async singleBlog(@Param('blogId') blogId: string): Promise<displayBlogDto> {
-    return await this.userService.singleBlog(blogId);
-  }
+
   @Get('userDetails/:_id')
   async userDetails(@Param('_id') _id: string): Promise<userDto> {
     return await this.userService.userDetails(_id);
@@ -112,5 +91,32 @@ export class UserControllerController {
   @Patch('newPassword')
   async newPassword(@Body() userDto: userDto): Promise<responseDto> {
     return await this.userService.newPassword(userDto);
+  }
+
+  @Post('createBlog')
+  async createBlog(@Body() blogDto: blogDto): Promise<responseDto> {
+    return await this.blogService.createBlog(blogDto);
+  }
+  @Put('editBlog')
+  async editBlog(@Body() blogDto: blogDto): Promise<responseDto> {
+    return await this.blogService.editBlog(blogDto);
+  }
+  @Delete('deleteBlog/:blogId')
+  async deleteBlog(@Param('blogId') blogId: string): Promise<responseDto> {
+    return await this.blogService.deleteBlog(blogId);
+  }
+  @Get('personalBlogs/:userId')
+  async personalBlogs(
+    @Param('userId') userId: string,
+  ): Promise<displayBlogDto[]> {
+    return await this.blogService.personalBlogs(userId);
+  }
+  @Get('allBlogs')
+  async allBlogs(): Promise<displayBlogDto[]> {
+    return await this.blogService.allBlogs();
+  }
+  @Get('singleBlog/:blogId')
+  async singleBlog(@Param('blogId') blogId: string): Promise<displayBlogDto> {
+    return await this.blogService.singleBlog(blogId);
   }
 }

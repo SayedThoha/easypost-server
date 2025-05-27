@@ -9,6 +9,7 @@ import { UserService } from './service/user/user.service';
 import { UserControllerController } from './controller/user-controller/user-controller.controller';
 import { UserRepository } from './repository/user.repository';
 import { BlogRepository } from './repository/blog.repository';
+import { BlogService } from './service/blog/blog.service';
 
 @Module({
   imports: [
@@ -22,8 +23,14 @@ import { BlogRepository } from './repository/blog.repository';
       signOptions: { expiresIn: '1h' },
     }),
   ],
-  providers: [UserService, JwtStrategy, UserRepository, BlogRepository],
+  providers: [
+    UserService,
+    BlogService,
+    JwtStrategy,
+    UserRepository,
+    BlogRepository,
+  ],
   controllers: [UserControllerController],
-  exports: [UserService, UserRepository, BlogRepository],
+  exports: [UserService, BlogService, UserRepository, BlogRepository],
 })
 export class UserModule {}

@@ -1,10 +1,10 @@
-import { Document, Types } from 'mongoose';
+import { Document } from 'mongoose';
 export declare class Blog extends Document {
     topic: string;
     title: string;
     content: string;
     image: string;
-    userId: Types.ObjectId;
+    userId: string;
     createdAt?: Date;
     updatedAt?: Date;
 }

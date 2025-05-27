@@ -18,6 +18,7 @@ const user_service_1 = require("./service/user/user.service");
 const user_controller_controller_1 = require("./controller/user-controller/user-controller.controller");
 const user_repository_1 = require("./repository/user.repository");
 const blog_repository_1 = require("./repository/blog.repository");
+const blog_service_1 = require("./service/blog/blog.service");
 let UserModule = class UserModule {
 };
 exports.UserModule = UserModule;
@@ -34,9 +35,15 @@ exports.UserModule = UserModule = __decorate([
                 signOptions: { expiresIn: '1h' },
             }),
         ],
-        providers: [user_service_1.UserService, jwt_Strategy_1.JwtStrategy, user_repository_1.UserRepository, blog_repository_1.BlogRepository],
+        providers: [
+            user_service_1.UserService,
+            blog_service_1.BlogService,
+            jwt_Strategy_1.JwtStrategy,
+            user_repository_1.UserRepository,
+            blog_repository_1.BlogRepository,
+        ],
         controllers: [user_controller_controller_1.UserControllerController],
-        exports: [user_service_1.UserService, user_repository_1.UserRepository, blog_repository_1.BlogRepository],
+        exports: [user_service_1.UserService, blog_service_1.BlogService, user_repository_1.UserRepository, blog_repository_1.BlogRepository],
     })
 ], UserModule);
 //# sourceMappingURL=user.module.js.map

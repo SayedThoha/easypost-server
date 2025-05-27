@@ -17,20 +17,12 @@ const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
 const blog_schema_1 = require("../schema/blog.schema");
 const common_1 = require("@nestjs/common");
-let BlogRepository = class BlogRepository {
+const base_repository_1 = require("./base.repository");
+let BlogRepository = class BlogRepository extends base_repository_1.BaseRepository {
     blogModel;
     constructor(blogModel) {
+        super(blogModel);
         this.blogModel = blogModel;
-    }
-    async create(blogData) {
-        const createdBlog = new this.blogModel(blogData);
-        return createdBlog.save();
-    }
-    async update(blogId, updateData) {
-        return this.blogModel.findByIdAndUpdate(blogId, { $set: updateData });
-    }
-    async delete(blogId) {
-        return this.blogModel.findByIdAndDelete(blogId);
     }
     async personalBlogs(userId) {
         const blogs = await this.blogModel

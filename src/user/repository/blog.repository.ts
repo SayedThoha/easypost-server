@@ -2,30 +2,19 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Blog } from '../schema/blog.schema';
 import { Injectable } from '@nestjs/common';
-import { blogDto } from '../dto/blog.dto';
 import { BlogDocument } from '../interfaces/blogInterface';
 import { IBlogRepository } from './IBlogRepository';
+import { BaseRepository } from './base.repository';
 @Injectable()
-export class BlogRepository implements IBlogRepository {
-  constructor(@InjectModel(Blog.name) private blogModel: Model<Blog>) {}
-
-  async create(blogData: Partial<blogDto>): Promise<Blog> {
-    const createdBlog = new this.blogModel(blogData);
-    return createdBlog.save();
+export class BlogRepository
+  extends BaseRepository<Blog>
+  implements IBlogRepository
+{
+  constructor(@InjectModel(Blog.name) private blogModel: Model<Blog>) {
+    super(blogModel);
   }
 
-  async update(
-    blogId: string,
-    updateData: Partial<blogDto>,
-  ): Promise<Blog | null> {
-    return this.blogModel.findByIdAndUpdate(blogId, { $set: updateData });
-  }
-
-  async delete(blogId: string): Promise<Blog | null> {
-    return this.blogModel.findByIdAndDelete(blogId);
-  }
-
-  async personalBlogs(userId: string) {
+  async personalBlogs(userId: string): Promise<BlogDocument[]> {
     const blogs = await this.blogModel
       .find({ userId: userId })
       .populate('userId')
@@ -33,7 +22,7 @@ export class BlogRepository implements IBlogRepository {
     return blogs;
   }
 
-  async allBlogs() {
+  async allBlogs(): Promise<BlogDocument[]> {
     const blogs = await this.blogModel
       .find()
       .populate('userId')
@@ -41,7 +30,7 @@ export class BlogRepository implements IBlogRepository {
     return blogs;
   }
 
-  async singleBlog(blogId: string) {
+  async singleBlog(blogId: string): Promise<BlogDocument | null> {
     const blogs = await this.blogModel
       .findById(blogId)
       .populate<{
@@ -52,7 +41,7 @@ export class BlogRepository implements IBlogRepository {
           email: string;
         };
       }>('userId')
-      .lean();
+      .lean<BlogDocument>();
 
     return blogs;
   }

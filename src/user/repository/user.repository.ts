@@ -3,18 +3,15 @@ import { User } from '../schema/user.schema';
 import { Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { IUserRepository } from './IUserRepository';
+import { BaseRepository } from './base.repository';
 
 @Injectable()
-export class UserRepository implements IUserRepository {
-  constructor(@InjectModel(User.name) private userModel: Model<User>) {}
-
-  async findByEmail(email: string): Promise<User | null> {
-    return this.userModel.findOne({ email });
-  }
-
-  async createUser(userData: Partial<User>): Promise<User> {
-    const user = new this.userModel(userData);
-    return user.save();
+export class UserRepository
+  extends BaseRepository<User>
+  implements IUserRepository
+{
+  constructor(@InjectModel(User.name) private userModel: Model<User>) {
+    super(userModel);
   }
 
   async updateUser(email: string, otp: number): Promise<void> {
@@ -24,17 +21,10 @@ export class UserRepository implements IUserRepository {
     );
   }
 
-  async findUsersByEmail(email: string): Promise<User[]> {
-    return this.userModel.find({ email });
-  }
-
   async updateUserEmail(userId: string, newEmail: string): Promise<void> {
     await this.userModel.findByIdAndUpdate(userId, {
       $set: { email: newEmail },
     });
-  }
-  async findById(userId: string): Promise<User | null> {
-    return this.userModel.findById(userId);
   }
 
   async updateProfilePicture(

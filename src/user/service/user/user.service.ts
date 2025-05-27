@@ -1,5 +1,4 @@
 import { HttpException, HttpStatus, Injectable, Post } from '@nestjs/common';
-import { Types } from 'mongoose';
 import { JwtService } from '@nestjs/jwt';
 import { HttpStatusCodes } from 'src/common/httpStatusCodes';
 import { sendOtp } from 'src/common/otp.service';
@@ -7,8 +6,6 @@ import { registrationDto } from 'src/user/dto/registration.dto';
 import { responseDto } from 'src/user/dto/response.dto';
 import * as bcrypt from 'bcrypt';
 import { verifyOtpDto } from 'src/user/dto/verifyOtp.dto';
-import { blogDto } from 'src/user/dto/blog.dto';
-import { displayBlogDto } from 'src/user/dto/displayBlog.dto';
 import { userDto } from 'src/user/dto/user.dto';
 import { loginDto } from 'src/user/dto/login.dto';
 import { UserRepository } from 'src/user/repository/user.repository';
@@ -27,13 +24,13 @@ export class UserService {
   ): Promise<responseDto> {
     const { password, ...userData } = registrationDto;
 
-    const existingUser = await this.userRepository.findByEmail(userData.email);
+    const existingUser = await this.userRepository.findOne(userData.email);
     if (existingUser) {
       throw new HttpException('Email Already Exists', HttpStatus.BAD_REQUEST);
     } else {
       const hashedPassword = await bcrypt.hash(password, 10);
 
-      await this.userRepository.createUser({
+      await this.userRepository.create({
         ...userData,
         password: hashedPassword,
       });
@@ -57,7 +54,7 @@ export class UserService {
   }
 
   async resendOtp(email: string): Promise<responseDto> {
-    const user = await this.userRepository.findByEmail(email);
+    const user = await this.userRepository.findOne(email);
     if (!user) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
@@ -83,13 +80,13 @@ export class UserService {
     const { otp, email, isForgotPassword } = verifyOtpDto;
 
     if (!isForgotPassword && newEmail) {
-      const users = await this.userRepository.findUsersByEmail(newEmail);
+      const users = await this.userRepository.findAll(newEmail);
       if (users.length !== 0) {
         throw new HttpException('Email already exists', HttpStatus.BAD_REQUEST);
       }
     }
 
-    const userData = await this.userRepository.findByEmail(email);
+    const userData = await this.userRepository.findOne(email);
     if (!userData) {
       throw new HttpException(
         'Could not find the user',
@@ -121,7 +118,7 @@ export class UserService {
 
   async login(loginDto: loginDto): Promise<responseDto> {
     const { email, password } = loginDto;
-    const userData = await this.userRepository.findByEmail(email);
+    const userData = await this.userRepository.findOne(email);
     if (!userData) {
       throw new HttpException('Invalid user', HttpStatus.BAD_REQUEST);
     } else {
@@ -259,7 +256,7 @@ export class UserService {
 
   async verifyEmail(userDto: userDto): Promise<responseDto> {
     if (userDto.email) {
-      const userData = await this.userRepository.findByEmail(userDto.email);
+      const userData = await this.userRepository.findOne(userDto.email);
       if (userData) {
         const otpResponse = await sendOtp(userData.email);
         await this.userRepository.updateOtpByUserId(
@@ -287,7 +284,7 @@ export class UserService {
 
   async newPassword(userDto: userDto): Promise<responseDto> {
     if (userDto.email && userDto.password) {
-      const userData = await this.userRepository.findByEmail(userDto.email);
+      const userData = await this.userRepository.findOne(userDto.email);
 
       if (userData) {
         const hashedPassword = await bcrypt.hash(userDto.password, 10);
@@ -313,137 +310,4 @@ export class UserService {
   }
 
   // blogs
-  async createBlog(createBlogDto: blogDto): Promise<responseDto> {
-    if (createBlogDto) {
-      const userData = await this.userRepository.findById(createBlogDto.userId);
-      if (userData) {
-        if (createBlogDto.topic === 'Other' && createBlogDto.otherTopic) {
-          createBlogDto.topic = createBlogDto.otherTopic;
-        }
-        await this.blogRepository.create({
-          topic: createBlogDto.topic,
-          title: createBlogDto.title,
-          content: createBlogDto.content,
-          image: createBlogDto.image,
-          userId: createBlogDto.userId,
-        });
-        return {
-          status: HttpStatusCodes.CREATED,
-          message: 'Blog Created Successfully',
-        };
-      } else {
-        return {
-          status: HttpStatusCodes.NOT_FOUND,
-          message: 'User not found',
-        };
-      }
-    } else {
-      return {
-        status: HttpStatusCodes.BAD_REQUEST,
-        message: 'Missing Required fields',
-      };
-    }
-  }
-
-  async editBlog(editBlogDto: blogDto): Promise<responseDto> {
-    if (editBlogDto) {
-      const userData = await this.userRepository.findById(editBlogDto.userId);
-      if (userData) {
-        if (editBlogDto.topic === 'other' && editBlogDto.otherTopic) {
-          editBlogDto.topic = editBlogDto.otherTopic;
-        }
-        await this.blogRepository.update(editBlogDto._id as string, {
-          topic: editBlogDto.topic,
-          title: editBlogDto.title,
-          content: editBlogDto.content,
-          image: editBlogDto.image,
-        });
-        return {
-          status: HttpStatusCodes.CREATED,
-          message: 'Blog Edited Successfully',
-        };
-      } else {
-        return {
-          status: HttpStatusCodes.NOT_FOUND,
-          message: 'User not found',
-        };
-      }
-    } else {
-      return {
-        status: HttpStatusCodes.BAD_REQUEST,
-        message: 'Missing Required fields',
-      };
-    }
-  }
-
-  async deleteBlog(_id: string): Promise<responseDto> {
-    await this.blogRepository.delete(_id);
-    return {
-      status: HttpStatusCodes.OK,
-      message: 'Deleted Successfully',
-    };
-  }
-
-  async personalBlogs(userId: string): Promise<displayBlogDto[]> {
-    const blogs = await this.blogRepository.personalBlogs(userId);
-    return blogs.map((blog) => ({
-      userId: {
-        _id: blog.userId._id,
-        firstName: blog.userId.firstName,
-        lastName: blog.userId.lastName,
-        email: blog.userId.email,
-      },
-      _id: blog._id,
-      topic: blog.topic,
-      title: blog.title,
-      content: blog.content,
-      image: blog.image,
-      createdAt: blog.createdAt,
-      updatedAt: blog.updatedAt,
-    }));
-  }
-
-  async allBlogs(): Promise<displayBlogDto[]> {
-    const blogs = await this.blogRepository.allBlogs();
-    return blogs.map((blog) => ({
-      userId: {
-        _id: blog.userId._id,
-        firstName: blog.userId.firstName,
-        lastName: blog.userId.lastName,
-        email: blog.userId.email,
-      },
-      _id: blog._id,
-      topic: blog.topic,
-      title: blog.title,
-      content: blog.content,
-      image: blog.image,
-      createdAt: blog.createdAt,
-      updatedAt: blog.updatedAt,
-    }));
-  }
-
-  async singleBlog(blogId: string): Promise<displayBlogDto> {
-    const blogs = await this.blogRepository.singleBlog(blogId);
-    if (!blogs) {
-      throw new HttpException('Blog not found', HttpStatus.NOT_FOUND);
-    }
-    if (!blogs.userId) {
-      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-    }
-    return {
-      userId: {
-        _id: blogs.userId._id,
-        firstName: blogs.userId.firstName,
-        lastName: blogs.userId.lastName,
-        email: blogs.userId.email,
-      },
-      _id: blogs._id as Types.ObjectId,
-      topic: blogs.topic,
-      title: blogs.title,
-      content: blogs.content,
-      image: blogs.image,
-      createdAt: blogs.createdAt ?? new Date(),
-      updatedAt: blogs.updatedAt ?? new Date(),
-    };
-  }
 }
