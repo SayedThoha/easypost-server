@@ -5,6 +5,8 @@ import { BaseRepository } from './base.repository';
 export declare class UserRepository extends BaseRepository<User> implements IUserRepository {
     private userModel;
     constructor(userModel: Model<User>);
+    findByEmail(email: string): Promise<User | null>;
+    findUsersByEmail(email: string): Promise<User[]>;
     updateUser(email: string, otp: number): Promise<void>;
     updateUserEmail(userId: string, newEmail: string): Promise<void>;
     updateProfilePicture(userId: string, profilePicture: string): Promise<void>;

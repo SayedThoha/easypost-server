@@ -9,14 +9,12 @@ import { verifyOtpDto } from 'src/user/dto/verifyOtp.dto';
 import { userDto } from 'src/user/dto/user.dto';
 import { loginDto } from 'src/user/dto/login.dto';
 import { UserRepository } from 'src/user/repository/user.repository';
-import { BlogRepository } from 'src/user/repository/blog.repository';
 
 @Injectable()
 export class UserService {
   constructor(
     private jwtService: JwtService,
     private userRepository: UserRepository,
-    private blogRepository: BlogRepository,
   ) {}
 
   async userRegistration(
@@ -24,7 +22,7 @@ export class UserService {
   ): Promise<responseDto> {
     const { password, ...userData } = registrationDto;
 
-    const existingUser = await this.userRepository.findOne(userData.email);
+    const existingUser = await this.userRepository.findByEmail(userData.email);
     if (existingUser) {
       throw new HttpException('Email Already Exists', HttpStatus.BAD_REQUEST);
     } else {
@@ -54,7 +52,7 @@ export class UserService {
   }
 
   async resendOtp(email: string): Promise<responseDto> {
-    const user = await this.userRepository.findOne(email);
+    const user = await this.userRepository.findByEmail(email);
     if (!user) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
@@ -79,16 +77,15 @@ export class UserService {
     }
     const { otp, email, isForgotPassword } = verifyOtpDto;
 
-    console.log('email:', email);
-
     if (!isForgotPassword && newEmail) {
-      const users = await this.userRepository.findAll(newEmail);
+      const users = await this.userRepository.findUsersByEmail(newEmail);
       if (users.length !== 0) {
         throw new HttpException('Email already exists', HttpStatus.BAD_REQUEST);
       }
     }
 
-    const userData = await this.userRepository.findOne(email);
+    const userData = await this.userRepository.findByEmail(email);
+
     if (!userData) {
       throw new HttpException(
         'Could not find the user',
@@ -100,6 +97,7 @@ export class UserService {
     const timeDifference = Math.floor(
       (new Date().getTime() - new Date(userData.otpSendTime).getTime()) / 1000,
     );
+
     if (timeDifference > otpExpirySecond) {
       throw new HttpException('Otp Expired. ', HttpStatus.BAD_REQUEST);
     }
@@ -120,7 +118,7 @@ export class UserService {
 
   async login(loginDto: loginDto): Promise<responseDto> {
     const { email, password } = loginDto;
-    const userData = await this.userRepository.findOne(email);
+    const userData = await this.userRepository.findByEmail(email);
     if (!userData) {
       throw new HttpException('Invalid user', HttpStatus.BAD_REQUEST);
     } else {
@@ -258,7 +256,7 @@ export class UserService {
 
   async verifyEmail(userDto: userDto): Promise<responseDto> {
     if (userDto.email) {
-      const userData = await this.userRepository.findOne(userDto.email);
+      const userData = await this.userRepository.findByEmail(userDto.email);
       if (userData) {
         const otpResponse = await sendOtp(userData.email);
         await this.userRepository.updateOtpByUserId(
@@ -286,7 +284,7 @@ export class UserService {
 
   async newPassword(userDto: userDto): Promise<responseDto> {
     if (userDto.email && userDto.password) {
-      const userData = await this.userRepository.findOne(userDto.email);
+      const userData = await this.userRepository.findByEmail(userDto.email);
 
       if (userData) {
         const hashedPassword = await bcrypt.hash(userDto.password, 10);
@@ -310,6 +308,4 @@ export class UserService {
       };
     }
   }
-
-  // blogs
 }

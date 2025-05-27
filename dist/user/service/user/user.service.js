@@ -16,19 +16,16 @@ const httpStatusCodes_1 = require("../../../common/httpStatusCodes");
 const otp_service_1 = require("../../../common/otp.service");
 const bcrypt = require("bcrypt");
 const user_repository_1 = require("../../repository/user.repository");
-const blog_repository_1 = require("../../repository/blog.repository");
 let UserService = class UserService {
     jwtService;
     userRepository;
-    blogRepository;
-    constructor(jwtService, userRepository, blogRepository) {
+    constructor(jwtService, userRepository) {
         this.jwtService = jwtService;
         this.userRepository = userRepository;
-        this.blogRepository = blogRepository;
     }
     async userRegistration(registrationDto) {
         const { password, ...userData } = registrationDto;
-        const existingUser = await this.userRepository.findOne(userData.email);
+        const existingUser = await this.userRepository.findByEmail(userData.email);
         if (existingUser) {
             throw new common_1.HttpException('Email Already Exists', common_1.HttpStatus.BAD_REQUEST);
         }
@@ -55,7 +52,7 @@ let UserService = class UserService {
         }
     }
     async resendOtp(email) {
-        const user = await this.userRepository.findOne(email);
+        const user = await this.userRepository.findByEmail(email);
         if (!user) {
             throw new common_1.HttpException('User not found', common_1.HttpStatus.NOT_FOUND);
         }
@@ -75,14 +72,13 @@ let UserService = class UserService {
             newEmail = verifyOtpDto.newEmail;
         }
         const { otp, email, isForgotPassword } = verifyOtpDto;
-        console.log('email:', email);
         if (!isForgotPassword && newEmail) {
-            const users = await this.userRepository.findAll(newEmail);
+            const users = await this.userRepository.findUsersByEmail(newEmail);
             if (users.length !== 0) {
                 throw new common_1.HttpException('Email already exists', common_1.HttpStatus.BAD_REQUEST);
             }
         }
-        const userData = await this.userRepository.findOne(email);
+        const userData = await this.userRepository.findByEmail(email);
         if (!userData) {
             throw new common_1.HttpException('Could not find the user', common_1.HttpStatus.BAD_REQUEST);
         }
@@ -105,7 +101,7 @@ let UserService = class UserService {
     }
     async login(loginDto) {
         const { email, password } = loginDto;
-        const userData = await this.userRepository.findOne(email);
+        const userData = await this.userRepository.findByEmail(email);
         if (!userData) {
             throw new common_1.HttpException('Invalid user', common_1.HttpStatus.BAD_REQUEST);
         }
@@ -227,7 +223,7 @@ let UserService = class UserService {
     }
     async verifyEmail(userDto) {
         if (userDto.email) {
-            const userData = await this.userRepository.findOne(userDto.email);
+            const userData = await this.userRepository.findByEmail(userDto.email);
             if (userData) {
                 const otpResponse = await (0, otp_service_1.sendOtp)(userData.email);
                 await this.userRepository.updateOtpByUserId(userData._id, Number(otpResponse.otp));
@@ -253,7 +249,7 @@ let UserService = class UserService {
     }
     async newPassword(userDto) {
         if (userDto.email && userDto.password) {
-            const userData = await this.userRepository.findOne(userDto.email);
+            const userData = await this.userRepository.findByEmail(userDto.email);
             if (userData) {
                 const hashedPassword = await bcrypt.hash(userDto.password, 10);
                 await this.userRepository.updatePassword(userDto.email, hashedPassword);
@@ -288,7 +284,6 @@ __decorate([
 exports.UserService = UserService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [jwt_1.JwtService,
-        user_repository_1.UserRepository,
-        blog_repository_1.BlogRepository])
+        user_repository_1.UserRepository])
 ], UserService);
 //# sourceMappingURL=user.service.js.map

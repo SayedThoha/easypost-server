@@ -11,16 +11,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BlogService = void 0;
 const common_1 = require("@nestjs/common");
-const jwt_1 = require("@nestjs/jwt");
 const httpStatusCodes_1 = require("../../../common/httpStatusCodes");
 const blog_repository_1 = require("../../repository/blog.repository");
 const user_repository_1 = require("../../repository/user.repository");
 let BlogService = class BlogService {
-    jwtService;
     userRepository;
     blogRepository;
-    constructor(jwtService, userRepository, blogRepository) {
-        this.jwtService = jwtService;
+    constructor(userRepository, blogRepository) {
         this.userRepository = userRepository;
         this.blogRepository = blogRepository;
     }
@@ -160,8 +157,7 @@ let BlogService = class BlogService {
 exports.BlogService = BlogService;
 exports.BlogService = BlogService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [jwt_1.JwtService,
-        user_repository_1.UserRepository,
+    __metadata("design:paramtypes", [user_repository_1.UserRepository,
         blog_repository_1.BlogRepository])
 ], BlogService);
 //# sourceMappingURL=blog.service.js.map

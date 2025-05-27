@@ -5,12 +5,10 @@ import { verifyOtpDto } from 'src/user/dto/verifyOtp.dto';
 import { userDto } from 'src/user/dto/user.dto';
 import { loginDto } from 'src/user/dto/login.dto';
 import { UserRepository } from 'src/user/repository/user.repository';
-import { BlogRepository } from 'src/user/repository/blog.repository';
 export declare class UserService {
     private jwtService;
     private userRepository;
-    private blogRepository;
-    constructor(jwtService: JwtService, userRepository: UserRepository, blogRepository: BlogRepository);
+    constructor(jwtService: JwtService, userRepository: UserRepository);
     userRegistration(registrationDto: registrationDto): Promise<responseDto>;
     resendOtp(email: string): Promise<responseDto>;
     verifyOtp(verifyOtpDto: verifyOtpDto): Promise<responseDto>;

@@ -1,5 +1,4 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import { HttpStatusCodes } from 'src/common/httpStatusCodes';
 import { blogDto } from 'src/user/dto/blog.dto';
 import { displayBlogDto } from 'src/user/dto/displayBlog.dto';
@@ -10,7 +9,6 @@ import { UserRepository } from 'src/user/repository/user.repository';
 @Injectable()
 export class BlogService {
   constructor(
-    private jwtService: JwtService,
     private userRepository: UserRepository,
     private blogRepository: BlogRepository,
   ) {}

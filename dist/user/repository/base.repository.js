@@ -19,12 +19,6 @@ class BaseRepository {
     async delete(id) {
         return this.model.findByIdAndDelete(id);
     }
-    async findAll(filter) {
-        return this.model.find({ filter });
-    }
-    async findOne(filter) {
-        return this.model.findOne({ filter });
-    }
 }
 exports.BaseRepository = BaseRepository;
 //# sourceMappingURL=base.repository.js.map

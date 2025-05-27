@@ -24,28 +24,26 @@ let UserRepository = class UserRepository extends base_repository_1.BaseReposito
         super(userModel);
         this.userModel = userModel;
     }
+    async findByEmail(email) {
+        return this.userModel.findOne({ email });
+    }
+    async findUsersByEmail(email) {
+        return this.userModel.find({ email });
+    }
     async updateUser(email, otp) {
         await this.userModel.updateOne({ email }, { $set: { otp: otp, otpSendTime: Date.now() } });
     }
     async updateUserEmail(userId, newEmail) {
-        await this.userModel.findByIdAndUpdate(userId, {
-            $set: { email: newEmail },
-        });
+        await this.update(userId, { email: newEmail });
     }
     async updateProfilePicture(userId, profilePicture) {
-        await this.userModel.findByIdAndUpdate(userId, {
-            $set: { profilePicture },
-        });
+        await this.update(userId, { profilePicture });
     }
     async updateUserName(userId, firstName, lastName) {
-        await this.userModel.findByIdAndUpdate(userId, {
-            $set: { firstName, lastName },
-        });
+        await this.update(userId, { firstName, lastName });
     }
     async updateOtpByUserId(userId, otp) {
-        await this.userModel.findByIdAndUpdate(userId, {
-            $set: { otp, otpSendTime: Date.now() },
-        });
+        await this.update(userId, { otp, otpSendTime: new Date() });
     }
     async updatePassword(email, hashedPassword) {
         await this.userModel.findOneAndUpdate({ email }, { $set: { password: hashedPassword } });
