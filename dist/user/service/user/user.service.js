@@ -75,6 +75,7 @@ let UserService = class UserService {
             newEmail = verifyOtpDto.newEmail;
         }
         const { otp, email, isForgotPassword } = verifyOtpDto;
+        console.log('email:', email);
         if (!isForgotPassword && newEmail) {
             const users = await this.userRepository.findAll(newEmail);
             if (users.length !== 0) {
