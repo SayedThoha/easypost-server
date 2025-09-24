@@ -4,11 +4,12 @@ import { responseDto } from 'src/user/dto/response.dto';
 import { verifyOtpDto } from 'src/user/dto/verifyOtp.dto';
 import { userDto } from 'src/user/dto/user.dto';
 import { loginDto } from 'src/user/dto/login.dto';
-import { UserRepository } from 'src/user/repository/user.repository';
-export declare class UserService {
+import { IUserService } from './IUser.service';
+import { IUserRepository } from 'src/user/repository/user/IUser.Repository';
+export declare class UserService implements IUserService {
     private jwtService;
     private userRepository;
-    constructor(jwtService: JwtService, userRepository: UserRepository);
+    constructor(jwtService: JwtService, userRepository: IUserRepository);
     userRegistration(registrationDto: registrationDto): Promise<responseDto>;
     resendOtp(email: string): Promise<responseDto>;
     verifyOtp(verifyOtpDto: verifyOtpDto): Promise<responseDto>;

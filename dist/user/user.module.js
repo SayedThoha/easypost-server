@@ -16,9 +16,14 @@ const jwt_Strategy_1 = require("./strategy/jwt.Strategy");
 const blog_schema_1 = require("./schema/blog.schema");
 const user_service_1 = require("./service/user/user.service");
 const user_controller_controller_1 = require("./controller/user-controller/user-controller.controller");
-const user_repository_1 = require("./repository/user.repository");
-const blog_repository_1 = require("./repository/blog.repository");
+const user_repository_1 = require("./repository/user/user.repository");
+const blog_repository_1 = require("./repository/blog/blog.repository");
 const blog_service_1 = require("./service/blog/blog.service");
+const blog_controller_1 = require("./controller/blog-controller/blog/blog.controller");
+const IUser_Repository_1 = require("./repository/user/IUser.Repository");
+const IBlog_Repository_1 = require("./repository/blog/IBlog.Repository");
+const IUser_service_1 = require("./service/user/IUser.service");
+const IBlog_service_1 = require("./service/blog/IBlog.service");
 let UserModule = class UserModule {
 };
 exports.UserModule = UserModule;
@@ -36,14 +41,26 @@ exports.UserModule = UserModule = __decorate([
             }),
         ],
         providers: [
-            user_service_1.UserService,
-            blog_service_1.BlogService,
             jwt_Strategy_1.JwtStrategy,
-            user_repository_1.UserRepository,
-            blog_repository_1.BlogRepository,
+            {
+                provide: IUser_Repository_1.IUserRepository,
+                useClass: user_repository_1.UserRepository,
+            },
+            {
+                provide: IBlog_Repository_1.IBlogRepository,
+                useClass: blog_repository_1.BlogRepository,
+            },
+            {
+                provide: IUser_service_1.IUserService,
+                useClass: user_service_1.UserService,
+            },
+            {
+                provide: IBlog_service_1.IBlogService,
+                useClass: blog_service_1.BlogService,
+            },
         ],
-        controllers: [user_controller_controller_1.UserControllerController],
-        exports: [user_service_1.UserService, blog_service_1.BlogService, user_repository_1.UserRepository, blog_repository_1.BlogRepository],
+        controllers: [user_controller_controller_1.UserControllerController, blog_controller_1.BlogController],
+        exports: [IUser_Repository_1.IUserRepository, IBlog_Repository_1.IBlogRepository, IUser_service_1.IUserService, IBlog_service_1.IBlogService],
     })
 ], UserModule);
 //# sourceMappingURL=user.module.js.map

@@ -15,7 +15,7 @@ const jwt_1 = require("@nestjs/jwt");
 const httpStatusCodes_1 = require("../../../common/httpStatusCodes");
 const otp_service_1 = require("../../../common/otp.service");
 const bcrypt = require("bcrypt");
-const user_repository_1 = require("../../repository/user.repository");
+const IUser_Repository_1 = require("../../repository/user/IUser.Repository");
 let UserService = class UserService {
     jwtService;
     userRepository;
@@ -284,6 +284,6 @@ __decorate([
 exports.UserService = UserService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [jwt_1.JwtService,
-        user_repository_1.UserRepository])
+        IUser_Repository_1.IUserRepository])
 ], UserService);
 //# sourceMappingURL=user.service.js.map

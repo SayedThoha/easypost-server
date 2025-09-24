@@ -1,16 +1,12 @@
-import { blogDto } from 'src/user/dto/blog.dto';
-import { displayBlogDto } from 'src/user/dto/displayBlog.dto';
 import { loginDto } from 'src/user/dto/login.dto';
 import { registrationDto } from 'src/user/dto/registration.dto';
 import { responseDto } from 'src/user/dto/response.dto';
 import { userDto } from 'src/user/dto/user.dto';
 import { verifyOtpDto } from 'src/user/dto/verifyOtp.dto';
-import { BlogService } from 'src/user/service/blog/blog.service';
-import { UserService } from 'src/user/service/user/user.service';
+import { IUserService } from 'src/user/service/user/IUser.service';
 export declare class UserControllerController {
-    private readonly userService;
-    private readonly blogService;
-    constructor(userService: UserService, blogService: BlogService);
+    private userService;
+    constructor(userService: IUserService);
     userRegistration(registrationDto: registrationDto): Promise<responseDto>;
     resendOtp(email: string): Promise<responseDto>;
     verifyOtp(verifyOtpDto: verifyOtpDto): Promise<responseDto>;
@@ -22,10 +18,4 @@ export declare class UserControllerController {
     editUserEmail(userDto: userDto): Promise<responseDto>;
     verifyEmail(userDto: userDto): Promise<responseDto>;
     newPassword(userDto: userDto): Promise<responseDto>;
-    createBlog(blogDto: blogDto): Promise<responseDto>;
-    editBlog(blogDto: blogDto): Promise<responseDto>;
-    deleteBlog(blogId: string): Promise<responseDto>;
-    personalBlogs(userId: string): Promise<displayBlogDto[]>;
-    allBlogs(): Promise<displayBlogDto[]>;
-    singleBlog(blogId: string): Promise<displayBlogDto>;
 }

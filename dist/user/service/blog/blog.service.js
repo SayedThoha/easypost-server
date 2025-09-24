@@ -12,8 +12,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.BlogService = void 0;
 const common_1 = require("@nestjs/common");
 const httpStatusCodes_1 = require("../../../common/httpStatusCodes");
-const blog_repository_1 = require("../../repository/blog.repository");
-const user_repository_1 = require("../../repository/user.repository");
+const IBlog_Repository_1 = require("../../repository/blog/IBlog.Repository");
+const IUser_Repository_1 = require("../../repository/user/IUser.Repository");
 let BlogService = class BlogService {
     userRepository;
     blogRepository;
@@ -157,7 +157,7 @@ let BlogService = class BlogService {
 exports.BlogService = BlogService;
 exports.BlogService = BlogService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [user_repository_1.UserRepository,
-        blog_repository_1.BlogRepository])
+    __metadata("design:paramtypes", [IUser_Repository_1.IUserRepository,
+        IBlog_Repository_1.IBlogRepository])
 ], BlogService);
 //# sourceMappingURL=blog.service.js.map

@@ -8,13 +8,14 @@ import * as bcrypt from 'bcrypt';
 import { verifyOtpDto } from 'src/user/dto/verifyOtp.dto';
 import { userDto } from 'src/user/dto/user.dto';
 import { loginDto } from 'src/user/dto/login.dto';
-import { UserRepository } from 'src/user/repository/user.repository';
+import { IUserService } from './IUser.service';
+import { IUserRepository } from 'src/user/repository/user/IUser.Repository';
 
 @Injectable()
-export class UserService {
+export class UserService implements IUserService {
   constructor(
     private jwtService: JwtService,
-    private userRepository: UserRepository,
+    private userRepository: IUserRepository,
   ) {}
 
   async userRegistration(

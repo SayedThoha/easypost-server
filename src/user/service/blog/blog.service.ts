@@ -3,14 +3,14 @@ import { HttpStatusCodes } from 'src/common/httpStatusCodes';
 import { blogDto } from 'src/user/dto/blog.dto';
 import { displayBlogDto } from 'src/user/dto/displayBlog.dto';
 import { responseDto } from 'src/user/dto/response.dto';
-import { BlogRepository } from 'src/user/repository/blog.repository';
-import { UserRepository } from 'src/user/repository/user.repository';
+import { IBlogRepository } from 'src/user/repository/blog/IBlog.Repository';
+import { IUserRepository } from 'src/user/repository/user/IUser.Repository';
 
 @Injectable()
 export class BlogService {
   constructor(
-    private userRepository: UserRepository,
-    private blogRepository: BlogRepository,
+    private userRepository: IUserRepository,
+    private blogRepository: IBlogRepository,
   ) {}
 
   async createBlog(createBlogDto: blogDto): Promise<responseDto> {

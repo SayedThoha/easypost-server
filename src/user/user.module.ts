@@ -7,9 +7,14 @@ import { JwtStrategy } from './strategy/jwt.Strategy';
 import { Blog, BlogSchema } from './schema/blog.schema';
 import { UserService } from './service/user/user.service';
 import { UserControllerController } from './controller/user-controller/user-controller.controller';
-import { UserRepository } from './repository/user.repository';
-import { BlogRepository } from './repository/blog.repository';
+import { UserRepository } from './repository/user/user.repository';
+import { BlogRepository } from './repository/blog/blog.repository';
 import { BlogService } from './service/blog/blog.service';
+import { BlogController } from './controller/blog-controller/blog/blog.controller';
+import { IUserRepository } from './repository/user/IUser.Repository';
+import { IBlogRepository } from './repository/blog/IBlog.Repository';
+import { IUserService } from './service/user/IUser.service';
+import { IBlogService } from './service/blog/IBlog.service';
 
 @Module({
   imports: [
@@ -24,13 +29,25 @@ import { BlogService } from './service/blog/blog.service';
     }),
   ],
   providers: [
-    UserService,
-    BlogService,
     JwtStrategy,
-    UserRepository,
-    BlogRepository,
+    {
+      provide: IUserRepository,
+      useClass: UserRepository,
+    },
+    {
+      provide: IBlogRepository,
+      useClass: BlogRepository,
+    },
+    {
+      provide: IUserService,
+      useClass: UserService,
+    },
+    {
+      provide: IBlogService,
+      useClass: BlogService,
+    },
   ],
-  controllers: [UserControllerController],
-  exports: [UserService, BlogService, UserRepository, BlogRepository],
+  controllers: [UserControllerController, BlogController],
+  exports: [IUserRepository, IBlogRepository, IUserService, IBlogService],
 })
 export class UserModule {}

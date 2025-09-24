@@ -7,7 +7,7 @@ async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     app.useGlobalFilters(new customHttpExceptionFilter_1.CustomHttpExceptionFilter());
     app.enableCors({
-        origin: 'https://easypost-client.vercel.app',
+        origin: 'http://localhost:4200',
         methods: 'GET,POST,PUT,PATCH,DELETE',
         credentials: true,
     });
